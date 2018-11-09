@@ -1,5 +1,5 @@
 # ssl-certificate-downloader
-Logs and downloads all certificates in the chain presented by a server.
+Logs and downloads all certificates as pem files in the chain presented by a server.
 
 Note that the java code has no dependencies so you can compile and run the single class on a server if you want just using javac.
 
