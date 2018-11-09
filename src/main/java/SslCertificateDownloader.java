@@ -64,7 +64,7 @@ public final class SslCertificateDownloader {
 
     private static void writeCertificatePem(X509Certificate cert, File file)
             throws IOException, CertificateEncodingException {
-        // write out the root
+        file.getParentFile().mkdirs();
         try (FileOutputStream out = new FileOutputStream(file)) {
             Base64.Encoder encoder = Base64.getMimeEncoder(64, new byte[] { 0x0a });
             out.write(BEGIN_CERT.getBytes(StandardCharsets.US_ASCII));

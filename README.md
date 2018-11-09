@@ -26,3 +26,14 @@ Certificate written to target/GlobalSign.pem
 ```
 
 You can also run the main method of `SslCertificateDownloader` and pass the url as the first argument.
+
+You can also run the jar file like so:
+
+```bash
+// build the jar file into the target directory
+mvn clean install
+cd target
+java -jar -Dhttps.proxyHost=proxy -Dhttps.proxyPort=8080 -jar *.jar https://google.com
+// list the downloaded pem files
+ls target
+```
