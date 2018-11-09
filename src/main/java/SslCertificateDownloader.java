@@ -29,13 +29,7 @@ public final class SslCertificateDownloader {
     private static final String BEGIN_CERT = "-----BEGIN CERTIFICATE-----";
     private static final String END_CERT = "-----END CERTIFICATE-----";
 
-    private final String url;
-
-    public SslCertificateDownloader(String url) {
-        this.url = url;
-    }
-
-    public void run() throws Exception {
+    public static void run(String url) throws Exception {
         SSLContext ctx = null;
         ctx = SSLContext.getInstance("TLS");
         ctx.init(null, new TrustManager[] { new CustomTrustManager() }, new SecureRandom());
@@ -61,7 +55,29 @@ public final class SslCertificateDownloader {
         System.out.println(s);
     }
 
-    class CustomTrustManager implements X509TrustManager {
+    private static String getCN(String s) {
+        Pattern p = Pattern.compile(".*\\bCN=([^,]*),.*");
+        Matcher m = p.matcher(s);
+        m.find();
+        return m.group(1);
+    }
+
+    private static void writeCertificatePem(X509Certificate cert, File file)
+            throws IOException, CertificateEncodingException {
+        // write out the root
+        try (FileOutputStream out = new FileOutputStream(file)) {
+            Base64.Encoder encoder = Base64.getMimeEncoder(64, new byte[] { 0x0a });
+            out.write(BEGIN_CERT.getBytes(StandardCharsets.US_ASCII));
+            out.write(0x0a); // Newline
+            out.write(encoder.encode(cert.getEncoded()));
+            out.write(0x0a); // Newline
+            out.write(END_CERT.getBytes(StandardCharsets.US_ASCII));
+            out.write(0x0a); // Newline
+            println("Certificate written to " + file);
+        }
+    }
+
+    private static class CustomTrustManager implements X509TrustManager {
 
         boolean done;
 
@@ -93,31 +109,9 @@ public final class SslCertificateDownloader {
         }
     }
 
-    private static String getCN(String s) {
-        Pattern p = Pattern.compile(".*\\bCN=([^,]*),.*");
-        Matcher m = p.matcher(s);
-        m.find();
-        return m.group(1);
-    }
-
-    private static void writeCertificatePem(X509Certificate cert, File file)
-            throws IOException, CertificateEncodingException {
-        // write out the root
-        try (FileOutputStream out = new FileOutputStream(file)) {
-            Base64.Encoder encoder = Base64.getMimeEncoder(64, new byte[] { 0x0a });
-            out.write(BEGIN_CERT.getBytes(StandardCharsets.US_ASCII));
-            out.write(0x0a); // Newline
-            out.write(encoder.encode(cert.getEncoded()));
-            out.write(0x0a); // Newline
-            out.write(END_CERT.getBytes(StandardCharsets.US_ASCII));
-            out.write(0x0a); // Newline
-            println("Certificate written to " + file);
-        }
-    }
-
     public static void main(String[] args) throws Exception {
         System.out.println("Downloading certs from " + Arrays.toString(args) + "\n");
-        new SslCertificateDownloader(args[0]).run();
+        SslCertificateDownloader.run(args[0]);
     }
 
 }

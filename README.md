@@ -5,7 +5,7 @@ Note that the java code has no dependencies so you can compile and run the singl
 
 ## Usage
 ```java
-new SslCertificateDownloader("https://google.com").run();
+SslCertificateDownloader.run("https://google.com");
 ```
 
 output:
