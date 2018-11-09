@@ -116,7 +116,7 @@ public final class SslCertificateDownloader {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println("downloading certs from " + Arrays.toString(args));
+        System.out.println("Downloading certs from " + Arrays.toString(args) + "\n");
         new SslCertificateDownloader(args[0]).run();
     }
 
