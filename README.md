@@ -25,4 +25,4 @@ Certificate:
 Certificate written to target/GlobalSign.pem
 ```
 
-
+You can also run the main method of `SslCertificateDownloader` and pass the url as the first argument.
