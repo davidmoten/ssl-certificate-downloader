@@ -1,9 +1,11 @@
 # ssl-certificate-downloader
 Logs and downloads all certificates in the chain presented by a server.
 
+Note that the java code has no dependencies so you can compile and run the single class on a server if you want just using javac.
+
 ## Usage
 ```java
-new SslCertificateDownloader("https://google.com");
+new SslCertificateDownloader("https://google.com").run();
 ```
 
 output:
