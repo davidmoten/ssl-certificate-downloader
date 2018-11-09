@@ -1,0 +1,9 @@
+.idea/
+.gradle/
+build/
+root.pem
+/bin/
+target/
+.classpath
+.project
+.settings
